@@ -78,7 +78,7 @@ public class Main {
             return stack.isEmpty();
         }
 
-        /* Para debug...
+        /* For debugging...
         @Override
         public String toString() {
             if (isEmpty()) return "Bottom -> null -> Top";
