@@ -1,4 +1,4 @@
-package questao1068.tadpilha.beecrowd.av2.application;
+package av2.tadpilha.questao1068;
 
 import java.io.IOException;
 import java.util.Scanner;
