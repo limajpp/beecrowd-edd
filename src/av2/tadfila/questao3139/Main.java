@@ -1,35 +1,60 @@
 package av2.tadfila.questao3139;
 
-import java.io.IOException;
 import java.util.Scanner;
+import java.lang.Math;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
+    private static final int MAX_DAYS = 30;
+    private static final long[] QUEUE = new long[MAX_DAYS];
+    private static int front = 0;
+    private static int rear = -1;
+    private static int size = 0;
 
-        String[] currentAndMinFollowers = sc.nextLine().split(" ");
-        int currentFollowersNum = Integer.parseInt(currentAndMinFollowers[0]);
-        int minFollowersToPartnerUp = Integer.parseInt(currentAndMinFollowers[1]);
-        if (currentFollowersNum < 1 || currentFollowersNum >= minFollowersToPartnerUp ||
-            minFollowersToPartnerUp > Math.pow(10, 9) || currentFollowersNum >= Math.pow(10, 9))
-                throw new RuntimeException("Invalid followers parameter(s).");
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
+        long currentFollowers = scanner.nextLong();
+        long goalFollowers = scanner.nextLong();
 
-
-        sc.close();
-    }
-
-    private static class SubscribersQueue {
-        private final int[] QUEUE;
-        private final int DAYS;
-        private int elements;
-
-        public SubscribersQueue() {
-            DAYS = 30;
-            QUEUE = new int[DAYS];
-            elements = 0;
+        long sum = 0;
+        for (int i = 0; i < MAX_DAYS; i++) {
+            QUEUE[i] = scanner.nextLong();
+            sum += QUEUE[i];
+            size++;
+            rear++;
         }
 
+        long days = 0;
 
+        while (currentFollowers < goalFollowers) {
+            long mean = (long) Math.ceil((double) sum / MAX_DAYS);
+
+            currentFollowers += mean;
+            sum = sum - dequeue() + mean;
+            enqueue(mean);
+            days++;
+        }
+
+        System.out.println(days);
+
+        scanner.close();
+    }
+
+    private static void enqueue(long value) {
+        rear = (rear + 1) % MAX_DAYS;
+        QUEUE[rear] = value;
+
+        if (size < MAX_DAYS) {
+            size++;
+        } else {
+            front = (front + 1) % MAX_DAYS; // Circular QUEUE behavior
+        }
+    }
+
+    private static long dequeue() {
+        long value = QUEUE[front];
+        front = (front + 1) % MAX_DAYS;
+        size--;
+        return value;
     }
 }
